@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app_sample/features/detail_screen/book_detail_screen.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 import 'package:provider/provider.dart';
 
 import 'package:velocity_x/velocity_x.dart';
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   bool isShow = false;
   bool isFilter = false;
-  double _lowerValue = 200;
+  double _lowerValue = 10;
   double _upperValue = 800;
 
   @override
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     RangeSlider(
                       values: RangeValues(_lowerValue, _upperValue),
-                      min: 150,
+                      min: 10,
                       max: 800,
                       divisions: 20,
                       activeColor:
@@ -191,23 +191,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: TextFormField(
                               controller: searchController,
                               style: TextStyle(
-                                  color: theamNotifier.isDark
-                                      ? const Color.fromARGB(183, 255, 255, 255)
-                                      : Colors.white),
+                                color: theamNotifier.isDark
+                                    ? const Color.fromARGB(183, 255, 255, 255)
+                                    : Colors.white,
+                              ),
                               decoration: const InputDecoration(
-                                  prefixIcon: Icon(Icons.search_outlined),
-                                  prefixIconColor:
-                                      Color.fromARGB(186, 255, 255, 255),
-                                  hintText: "What would like to read?",
-                                  disabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                    color: Color.fromARGB(186, 255, 255, 255),
-                                  )),
-                              onFieldSubmitted: (String _) {
+                                prefixIcon: Icon(Icons.search_outlined),
+                                prefixIconColor:
+                                    Color.fromARGB(186, 255, 255, 255),
+                                hintText: "What would you like to read?",
+                                disabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  color: Color.fromARGB(186, 255, 255, 255),
+                                ),
+                              ),
+                              onChanged: (String value) {
                                 setState(() {
-                                  if (searchController.text == "") {
+                                  if (value.isEmpty) {
                                     isShow = false;
                                     isFilter = false;
                                   } else {
@@ -240,8 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? FutureBuilder(
                           future: FirebaseFirestore.instance
                               .collection("Books")
-                              .where('bookName',
-                                  isGreaterThanOrEqualTo: searchController.text)
+                              .where('bookNameLowercase',
+                                  isGreaterThanOrEqualTo:
+                                      searchController.text.toLowerCase())
+                              // .where('bookNameLowercase',
+                              //     isLessThanOrEqualTo:
+                              //         searchController.text.toLowerCase() +
+                              //             '\uf8ff')
                               .get(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
@@ -279,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       subtitle: Text(
-                                        "\$${(snapshot.data! as dynamic).docs[index]['uid']}",
+                                        "\$${(snapshot.data! as dynamic).docs[index]['price']}",
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
@@ -296,13 +303,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .fontWeight(FontWeight.w900)
                                 .size(28)
                                 .make(),
-                            GestureDetector(
-                              onTap: () => _showFilterSheet(theamNotifier),
-                              child: const Icon(
-                                Icons.filter_list,
-                                color: Colors.white,
-                              ),
-                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _showFilterSheet(theamNotifier),
+                                  child: const Icon(
+                                    Icons.filter_list,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                isFilter
+                                    ? const SizedBox(
+                                        width: 10,
+                                      )
+                                    : Container(),
+                                isFilter
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _lowerValue = 10;
+                                          _upperValue = 800;
+                                          isFilter = false;
+                                          setState(() {});
+                                        },
+                                        child: const Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            )
                           ],
                         ).px20(),
                   SizedBox(
@@ -421,8 +451,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection("Books")
-                        .where('uid', isGreaterThanOrEqualTo: _lowerValue)
-                        .where('uid', isLessThanOrEqualTo: _upperValue)
+                        .where('price', isGreaterThanOrEqualTo: _lowerValue)
+                        .where('price', isLessThanOrEqualTo: _upperValue)
                         .get(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -499,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .size(19)
                                               .fontWeight(FontWeight.w500)
                                               .make(),
-                                          "\$ ${(snapshot.data! as dynamic).docs[index]['uid']} "
+                                          "\$ ${(snapshot.data! as dynamic).docs[index]['price']} "
                                               .text
                                               .color(theamNotifier.isDark
                                                   ? Colors.white
@@ -532,6 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : FutureBuilder(
                         future: FirebaseFirestore.instance
                             .collection("Books")
+                            .orderBy('datePublished', descending: true)
                             .get(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
@@ -610,7 +641,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .size(19)
                                                   .fontWeight(FontWeight.w500)
                                                   .make(),
-                                              "\$ ${(snapshot.data! as dynamic).docs[index]['uid']}"
+                                              "\$ ${(snapshot.data! as dynamic).docs[index]['price']}"
                                                   .text
                                                   .color(theamNotifier.isDark
                                                       ? Colors.white

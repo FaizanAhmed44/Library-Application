@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,9 @@ import 'package:velocity_x/velocity_x.dart';
 
 class MyHomePage extends StatefulWidget {
   final String bookName;
-  MyHomePage({Key? key, required this.bookName}) : super(key: key);
+  final String bookPdfUrl;
+  MyHomePage({Key? key, required this.bookName, required this.bookPdfUrl})
+      : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -51,9 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     requestPersmission();
-    getFileFromUrl(
-            "https://firebasestorage.googleapis.com/v0/b/libraryapp-af87c.appspot.com/o/pdfs%2F1722431311470.pdf?alt=media&token=b13ab07d-8ca0-4303-857b-79e3bee1d4b2")
-        .then(
+    getFileFromUrl(widget.bookPdfUrl).then(
       (value) => {
         setState(() {
           if (value != null) {

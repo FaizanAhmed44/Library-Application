@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 

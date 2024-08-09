@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app_sample/features/detail_screen/book_detail_screen.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -60,7 +60,7 @@ class _SavedScreenState extends State<SavedScreen> {
         body: ListView(
           children: [
             const SizedBox(
-              height: 26,
+              height: 10,
             ),
             FutureBuilder(
                 future: FirebaseFirestore.instance
@@ -77,12 +77,13 @@ class _SavedScreenState extends State<SavedScreen> {
 
                   return GridView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: (snapshot.data! as dynamic).docs.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 7,
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 3,
+                              mainAxisSpacing: 5,
                               childAspectRatio: 1),
                       itemBuilder: (context, index) {
                         return GestureDetector(
@@ -101,13 +102,11 @@ class _SavedScreenState extends State<SavedScreen> {
                                 .then((val) {
                               setState(() {});
                             });
-                            print(snap);
                           },
                           child: Container(
                             width: 200,
                             height: 200,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                     image: NetworkImage(
                                         (snapshot.data! as dynamic).docs[index]

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:library_app_sample/features/detail_screen/pdfscreen.dart';
 import 'package:library_app_sample/features/profile/method/userMethod.dart';
 
-import 'package:library_app_sample/theme/theme_modal.dart';
-import 'package:library_app_sample/widget/utils/utils.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/widget/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'package:velocity_x/velocity_x.dart';
@@ -288,6 +288,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => MyHomePage(
+                          bookPdfUrl: widget.snap['pdfUrl'],
                           bookName: widget.snap['bookName'],
                         )));
               },

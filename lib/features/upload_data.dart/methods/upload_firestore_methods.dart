@@ -28,16 +28,18 @@ class FirestoreMethods {
       String bookId = const Uuid().v1();
 
       BookModel book = BookModel(
-          datePublished: DateTime.now(),
-          price: price,
-          description: description,
-          bookName: bookName,
-          bookProfImage: bookProfImage,
-          language: language,
-          noOfPages: noOfPages,
-          authorName: authorName,
-          bookId: bookId,
-          pdfUrl: pdfUrl);
+        datePublished: DateTime.now(),
+        price: int.parse(price),
+        description: description,
+        bookName: bookName,
+        bookNameLowercase: bookName.toLowerCase(),
+        bookProfImage: bookProfImage,
+        language: language,
+        noOfPages: noOfPages,
+        authorName: authorName,
+        bookId: bookId,
+        pdfUrl: pdfUrl,
+      );
 
       await _firestore.collection("Books").doc(bookId).set(book.toJson());
 

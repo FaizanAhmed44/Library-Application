@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookModel {
   final String description;
-  final String price;
+  final int price;
   final String bookName;
+  final String bookNameLowercase;
   final datePublished;
   final String bookProfImage;
   final String authorName;
@@ -23,11 +24,12 @@ class BookModel {
     required this.language,
     required this.bookId,
     required this.pdfUrl,
+    required this.bookNameLowercase,
   });
 
   Map<String, dynamic> toJson() => {
         "bookName": bookName,
-        "uid": price,
+        "price": price,
         "bookProfImage": bookProfImage,
         "description": description,
         "datePublished": datePublished,
@@ -36,6 +38,7 @@ class BookModel {
         "language": language,
         "bookId": bookId,
         "pdfUrl": pdfUrl,
+        "bookNameLowercase": bookNameLowercase,
       };
 
   static BookModel fromSnap(DocumentSnapshot snap) {
@@ -52,6 +55,7 @@ class BookModel {
       language: snapshot['language'],
       bookId: snapshot['bookId'],
       pdfUrl: snapshot['pdfUrl'],
+      bookNameLowercase: snapshot['bookNameLowercase'],
     );
   }
 }

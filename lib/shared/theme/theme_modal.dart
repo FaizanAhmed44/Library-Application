@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:lcs/Sharred%20Preferences/theam_sharred_preferences.dart';
-import 'package:library_app_sample/theme/shared_pref.dart';
+import 'package:library_app_sample/shared/theme/shared_pref.dart';
 
 class TheamModal extends ChangeNotifier {
   late bool _isDark;

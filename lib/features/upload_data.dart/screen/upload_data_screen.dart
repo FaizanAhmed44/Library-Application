@@ -8,9 +8,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:library_app_sample/features/upload_data.dart/methods/upload_firestore_methods.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
-import 'package:library_app_sample/widget/textField.dart';
-import 'package:library_app_sample/widget/utils/utils.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/widget/textField.dart';
+import 'package:library_app_sample/shared/widget/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'package:velocity_x/velocity_x.dart';
@@ -159,10 +159,32 @@ class _AddProductState extends State<AddProduct> {
                   height: 40,
                 ),
                 GestureDetector(
-                    onTap: getPdf,
-                    child: _pdfFile != null
-                        ? "PDF Selected".text.xl4.make()
-                        : "Tap to select PDF".text.xl4.make()),
+                  onTap: getPdf,
+                  child: _pdfFile != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            "PDF Selected"
+                                .text
+                                .xl4
+                                .color(theamNotifier.isDark
+                                    ? Colors.white
+                                    : Colors.black)
+                                .make(),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Icon(Icons.edit_outlined)
+                          ],
+                        )
+                      : "Tap to select PDF"
+                          .text
+                          .color(theamNotifier.isDark
+                              ? Colors.white
+                              : Colors.black)
+                          .xl4
+                          .make(),
+                ),
                 const SizedBox(
                   height: 40,
                 ),

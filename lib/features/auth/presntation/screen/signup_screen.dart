@@ -1,32 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:library_app_sample/features/auth/presntation/screen/login_screen.dart';
 import 'package:library_app_sample/features/bottm_navigation/screen/navigation_bar.dart';
-import 'package:library_app_sample/features/home/home_screen.dart';
 import 'package:library_app_sample/main.dart';
-import 'package:library_app_sample/features/auth/methods/auth_methods.dart';
-import 'package:library_app_sample/features/auth/screen/signup_screen.dart';
 
-import 'package:library_app_sample/theme/theme_modal.dart';
-import 'package:library_app_sample/widget/textField.dart';
-import 'package:library_app_sample/widget/utils/utils.dart';
+import 'package:library_app_sample/features/auth/logic/providers/auth_methods.dart';
+
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/widget/textField.dart';
+import 'package:library_app_sample/shared/widget/utils/utils.dart';
 import 'package:provider/provider.dart';
+
 import 'package:velocity_x/velocity_x.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({
-    super.key,
-  });
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final List<String> imagesUrl = [
-    'asset/images/fb.png',
-    'asset/images/google.png',
+    'https://thumbs.dreamstime.com/b/computer-illustration-google-logo-isolated-white-background-google-logo-258534792.jpg',
   ];
   bool isLoading = false;
   @override
@@ -34,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    usernameController.dispose();
   }
 
   @override
@@ -62,6 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
             flexibleSpace: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
+                    // begin: Alignment.topCenter,
+                    // end: Alignment.bottomCenter,
                     colors: theamNotifier.isDark
                         ? [
                             const Color.fromARGB(255, 34, 34, 35),
@@ -81,9 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Container(
                   width: double.maxFinite,
-                  height: 250,
+                  height: 205,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
+                        // begin: Alignment.topCenter,
+                        // end: Alignment.bottomCenter,
                         colors: theamNotifier.isDark
                             ? [
                                 const Color.fromARGB(255, 34, 34, 35),
@@ -94,24 +98,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Color.fromARGB(255, 25, 109, 179)
                               ]),
                   ),
-                  child: "Welcome Back!"
+                  child: "Create Your Account"
                       .text
                       .color(Colors.white)
-                      .size(38)
+                      .size(37)
                       .fontWeight(FontWeight.w800)
                       .make()
                       .centered()
-                      .pOnly(bottom: 132),
+                      .pOnly(bottom: 130),
                 ),
                 Container(
                   width: double.maxFinite,
                   height: double.maxFinite,
                   margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.15),
+                      top: MediaQuery.of(context).size.height * 0.12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black
-                        : Colors.white,
+                    color: theamNotifier.isDark ? Colors.black : Colors.white,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(125),
                     ),
@@ -120,19 +122,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     shrinkWrap: true,
                     children: [
                       const SizedBox(
-                        height: 70,
+                        height: 40,
                       ),
-                      "Unlock a world of knowledge with your login."
+                      "Create your account so you can manage your personal information."
                           .text
                           .size(17)
-                          .color(Theme.of(context).brightness == Brightness.dark
+                          .color(theamNotifier.isDark
                               ? Colors.white
                               : Colors.black)
                           .fontWeight(FontWeight.w600)
                           .make()
-                          .pOnly(left: 37, right: 16),
+                          .pOnly(left: 55, right: 30),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
+                        height: MediaQuery.of(context).size.height * 0.046,
+                      ),
+                      TextFieldInput(
+                        controller: usernameController,
+                        text: "Username",
+                        icon: Icons.person_2_outlined,
+                      ).px20(),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.035,
                       ),
                       TextFieldInput(
                         controller: emailController,
@@ -140,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         icon: Icons.email_outlined,
                       ).px20(),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
+                        height: MediaQuery.of(context).size.height * 0.035,
                       ),
                       TextFieldInput(
                         controller: passwordController,
@@ -149,25 +159,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         icon: Icons.password_outlined,
                       ).px20(),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
+                        height: MediaQuery.of(context).size.height * 0.035,
                       ),
                       GestureDetector(
                         onTap: () async {
                           setState(() {
                             isLoading = true;
                           });
-                          String res = await AuthMethods().logInUser(
+                          String res = await AuthMethods().signUpUser(
                               email: emailController.text,
-                              password: passwordController.text);
+                              password: passwordController.text,
+                              username: usernameController.text);
                           if (res == 'success') {
                             emailController.clear();
                             passwordController.clear();
+                            usernameController.clear();
                             showSnackBar("Successfully Login", context);
                             box1.put('isLogedIn', true);
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BottomNavigationExample()));
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) =>
+                                  const BottomNavigationExample(),
+                            ));
                           } else {
                             showSnackBar(res, context);
                           }
@@ -177,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Container(
                           width: double.maxFinite,
-                          height: 60,
+                          height: 58,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               begin: Alignment.topCenter,
@@ -195,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : "Log in"
+                              : "Sign up"
                                   .text
                                   .color(Colors.white)
                                   .size(19.6)
@@ -207,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                       ),
-                      "Login with"
+                      "Sign Up With"
                           .text
                           .color(theamNotifier.isDark
                               ? Colors.white
@@ -223,32 +236,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: List.generate(imagesUrl.length, (index) {
                         return GestureDetector(
                           onTap: () async {
-                            if (index == 1) {
-                              User? user =
-                                  await AuthService().signInWithGoogle();
-                              if (user != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text("Google Sign-In successful!")),
-                                );
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BottomNavigationExample()));
-                                box1.put('isLogedIn', true);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Google Sign-In failed")),
-                                );
-                              }
+                            User? user = await AuthService().signInWithGoogle();
+                            if (user != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("Google Sign-In successful!")),
+                              );
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BottomNavigationExample()));
+                              box1.put('isLogedIn', true);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Google Sign-In failed")),
+                              );
                             }
                           },
                           child: CircleAvatar(
                             backgroundColor: Colors.blueAccent,
                             radius: 24,
-                            backgroundImage: AssetImage(imagesUrl[index]),
+                            backgroundImage: NetworkImage(imagesUrl[index]),
                           ).px8(),
                         );
                       })).centered(),
@@ -258,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         onTap: () => Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                                builder: (context) => const SignupScreen())),
+                                builder: (context) => const LoginScreen())),
                         child: RichText(
                           text: TextSpan(
                             text: "Don't have an account?",
@@ -269,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 15.7),
                             children: [
                               TextSpan(
-                                  text: "  Sign Up",
+                                  text: "  Login",
                                   style: TextStyle(
                                       color: theamNotifier.isDark
                                           ? Colors.white
@@ -288,59 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ],
             ),
-          )
-
-          // ListView(
-          //   shrinkWrap: true,
-          //   children: [
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.09,
-          //     ),
-          //     const Text(
-          //       "Welcome!",
-          //       style: TextStyle(
-          //         color: Colors.black,
-          //         fontWeight: FontWeight.bold,
-          //         fontSize: 32,
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.01,
-          //     ),
-          //     "Unlock a world of knowledge with your login."
-          //         .text
-          //         .color(Colors.grey)
-          //         .size(19)
-          //         .make(),
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.09,
-          //     ),
-          //     TextFieldInput(controller: emailController, text: "Email"),
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.04,
-          //     ),
-          //     TextFieldInput(controller: passwordController, text: "Password"),
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height * 0.04,
-          //     ),
-          //     Container(
-          //       width: double.maxFinite,
-          //       height: 60,
-          //       decoration: BoxDecoration(
-          //         color: Colors.blueAccent,
-          //         borderRadius: BorderRadius.circular(12),
-          //       ),
-          //       child: "Sign in"
-          //           .text
-          //           .color(Colors.white)
-          //           .size(19.6)
-          //           .bold
-          //           .make()
-          //           .centered(),
-          //     ),
-          //   ],
-          // ).px16(),
-          );
+          ));
     });
   }
 }

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:library_app_sample/features/auth/screen/login_screen.dart';
+import 'package:library_app_sample/features/auth/presntation/screen/login_screen.dart';
 import 'package:library_app_sample/features/bottm_navigation/screen/navigation_bar.dart';
 
 import 'package:library_app_sample/firebase_options.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 
 import 'package:provider/provider.dart';
 

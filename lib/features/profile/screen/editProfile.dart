@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:library_app_sample/features/auth/methods/auth_methods.dart';
+import 'package:library_app_sample/features/auth/logic/providers/auth_methods.dart';
 import 'package:library_app_sample/features/profile/method/userMethod.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
-import 'package:library_app_sample/widget/utils/utils.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
+import 'package:library_app_sample/shared/widget/utils/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -194,6 +194,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     TextFormField(
                       controller: nameController,
+                      style: TextStyle(
+                          color: theamNotifier.isDark
+                              ? const Color.fromARGB(132, 255, 255, 255)
+                              : Colors.black),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(
                             color: theamNotifier.isDark
@@ -221,6 +225,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     TextFormField(
                       controller: bioController,
+                      style: TextStyle(
+                          color: theamNotifier.isDark
+                              ? const Color.fromARGB(132, 255, 255, 255)
+                              : Colors.black),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(
                             color: theamNotifier.isDark
@@ -275,6 +283,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     TextFormField(
                       controller: ageController,
+                      style: TextStyle(
+                          color: theamNotifier.isDark
+                              ? const Color.fromARGB(132, 255, 255, 255)
+                              : Colors.black),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(
                             color: theamNotifier.isDark
@@ -304,6 +316,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     TextFormField(
                       controller: maritalStatusController,
+                      style: TextStyle(
+                          color: theamNotifier.isDark
+                              ? const Color.fromARGB(132, 255, 255, 255)
+                              : Colors.black),
                       decoration: InputDecoration(
                         hintStyle: TextStyle(
                             color: theamNotifier.isDark

@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app_sample/features/auth/screen/login_screen.dart';
-import 'package:library_app_sample/features/auth/methods/auth_methods.dart';
+import 'package:library_app_sample/features/about/screen/aboutScreen.dart';
+import 'package:library_app_sample/features/auth/presntation/screen/login_screen.dart';
+import 'package:library_app_sample/features/auth/logic/providers/auth_methods.dart';
 import 'package:library_app_sample/features/profile/screen/editProfile.dart';
 import 'package:library_app_sample/features/profile/widgets/rowwidget.dart';
 import 'package:library_app_sample/features/saved/screen/saved_screen.dart';
 import 'package:library_app_sample/main.dart';
-import 'package:library_app_sample/theme/theme_modal.dart';
+import 'package:library_app_sample/features/setting/setting.dart';
+import 'package:library_app_sample/shared/theme/theme_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -164,9 +166,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         text: "Edit Profile",
                       ),
                     ),
-                    const ProfileRow(
-                      icon: Icons.settings_outlined,
-                      text: "Setting",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AccountModeScreen()));
+                      },
+                      child: const ProfileRow(
+                        icon: Icons.settings_outlined,
+                        text: "Setting",
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -178,9 +186,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         text: "Saved",
                       ),
                     ),
-                    const ProfileRow(
-                      icon: Icons.info_outline,
-                      text: "About us",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AboutScreen()));
+                      },
+                      child: const ProfileRow(
+                        icon: Icons.info_outline,
+                        text: "About us",
+                      ),
                     ),
                     GestureDetector(
                       onTap: () async {
