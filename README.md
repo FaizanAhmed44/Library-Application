@@ -1,4 +1,4 @@
-# 📌 **Litereasy - Online Library Management App**  
+# 📚 **Litereasy - Online Library Management App**  
 
 **Litereasy** is a Flutter-based online library management application that allows users to explore, read, and manage books digitally. The app integrates Firebase for authentication, database storage, and book management, providing a seamless reading experience. Users can search for books, filter them by category, add favorites to a wishlist, and manage their profiles, while admins can add, update, and delete books.
 
